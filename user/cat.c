@@ -9,8 +9,8 @@ cat(int fd)
 {
   int n;
 
-  while((n = read(fd, buf, sizeof(buf))) > 0) {
-    if (write(1, buf, n) != n) {
+  while((n = read(fd, buf, sizeof(buf))) > 0) {   // read会返回成功读取的字节数
+    if (write(1, buf, n) != n) {                  // write会返回成功写入的字节数
       fprintf(2, "cat: write error\n");
       exit(1);
     }

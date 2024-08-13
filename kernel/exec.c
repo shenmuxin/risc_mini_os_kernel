@@ -9,8 +9,9 @@
 
 static int loadseg(pde_t *pgdir, uint64 addr, struct inode *ip, uint offset, uint sz);
 
+// exec要求参数列表以空指针(0)作为结束
 int
-exec(char *path, char **argv)
+exec(char *path, char **argv)     
 {
   char *s, *last;
   int i, off;

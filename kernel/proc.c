@@ -255,8 +255,9 @@ growproc(int n)
 
 // Create a new process, copying the parent.
 // Sets up child kernel stack to return as if from fork() system call.
+// fork()在父进程中返回子进程的PID，在子进程中返回0
 int
-fork(void)
+fork(void)    
 {
   int i, pid;
   struct proc *np;
