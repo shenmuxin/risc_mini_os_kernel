@@ -45,7 +45,7 @@ void find(char *path, char *target) {
 				printf("find: cannot stat %s\n", buf);
 				continue;
 			}
-			// 不要进入 `.` 和 `..`
+			// 不要进入 `.` 和 `..`，防止死循环
 			if(strcmp(buf+strlen(buf)-2, "/.") != 0 && strcmp(buf+strlen(buf)-3, "/..") != 0) {
 				find(buf, target); // 递归查找
 			}
@@ -57,6 +57,7 @@ void find(char *path, char *target) {
 
 int main(int argc, char *argv[])
 {
+    /* usage: find <path> <filename> */
 	if(argc < 3){
 		exit(0);
 	}
