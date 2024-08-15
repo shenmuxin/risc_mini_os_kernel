@@ -127,6 +127,7 @@ found:
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
 
+  p->syscall_trace = 0; // 为 syscall_trace 设置一个 0 的默认值
   return p;
 }
 
@@ -255,8 +256,9 @@ growproc(int n)
 
 // Create a new process, copying the parent.
 // Sets up child kernel stack to return as if from fork() system call.
+// fork()在父进程中返回子进程的PID，在子进程中返回0
 int
-fork(void)
+fork(void)    
 {
   int i, pid;
   struct proc *np;
@@ -290,6 +292,8 @@ fork(void)
   np->cwd = idup(p->cwd);
 
   safestrcpy(np->name, p->name, sizeof(p->name));
+
+  np->syscall_trace = p->syscall_trace; // 子进程继承父进程的 syscall_trace
 
   pid = np->pid;
 

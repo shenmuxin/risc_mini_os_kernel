@@ -23,6 +23,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int trace(int);     // 新增系统调用的跳板函数
 
 // ulib.c
 int stat(const char*, struct stat*);

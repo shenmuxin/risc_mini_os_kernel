@@ -47,7 +47,7 @@ ls(char *path)
     break;
 
   case T_DIR:
-    if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
+    if(strlen(path) + 1 + DIRSIZ + 1 > sizeof(buf)){
       printf("ls: path too long\n");
       break;
     }
@@ -55,11 +55,11 @@ ls(char *path)
     p = buf+strlen(buf);
     *p++ = '/';
     while(read(fd, &de, sizeof(de)) == sizeof(de)){
-      if(de.inum == 0)
+      if(de.inum == 0)    // 跳过空的目录项
         continue;
       memmove(p, de.name, DIRSIZ);
       p[DIRSIZ] = 0;
-      if(stat(buf, &st) < 0){
+      if(stat(buf, &st) < 0){   // 从buf中获取目录项文件的状态信息
         printf("ls: cannot stat %s\n", buf);
         continue;
       }
@@ -75,11 +75,11 @@ main(int argc, char *argv[])
 {
   int i;
 
-  if(argc < 2){
+  if(argc < 2){           // 如果没提供路径，则查找当前路径
     ls(".");
     exit(0);
   }
-  for(i=1; i<argc; i++)
+  for(i=1; i<argc; i++)   // 如果提供多个路径，则顺序查找这多个路径
     ls(argv[i]);
   exit(0);
 }

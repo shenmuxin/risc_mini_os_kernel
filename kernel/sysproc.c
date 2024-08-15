@@ -95,3 +95,16 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// 新增sys_trace系统调用
+uint64
+sys_trace(void)
+{
+  int mask;
+
+  if(argint(0, &mask) < 0) // 通过读取进程的 trapframe，获得 mask 参数
+    return -1;
+  
+  myproc()->syscall_trace = mask; // 设置调用进程的 syscall_trace mask
+  return 0;
+}

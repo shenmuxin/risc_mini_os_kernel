@@ -71,15 +71,17 @@ runcmd(struct cmd *cmd)
   default:
     panic("runcmd");
 
+  // 命令的解析的核心，通过解析递归调用runcmd()，使得可以处理复杂的命令行
   case EXEC:
-    ecmd = (struct execcmd*)cmd;
+    // C语言的多态性，强制类型转换，让基础指针能够指向具有类似结构的派生指针
+    ecmd = (struct execcmd*)cmd;      
     if(ecmd->argv[0] == 0)
       exit(1);
     exec(ecmd->argv[0], ecmd->argv);
     fprintf(2, "exec %s failed\n", ecmd->argv[0]);
     break;
 
-  case REDIR:
+  case REDIR:   // IO重定向
     rcmd = (struct redircmd*)cmd;
     close(rcmd->fd);
     if(open(rcmd->file, rcmd->mode) < 0){
@@ -97,20 +99,20 @@ runcmd(struct cmd *cmd)
     runcmd(lcmd->right);
     break;
 
-  case PIPE:
+  case PIPE:    // 管道
     pcmd = (struct pipecmd*)cmd;
     if(pipe(p) < 0)
       panic("pipe");
     if(fork1() == 0){
-      close(1);
-      dup(p[1]);
+      close(1);   // 关闭标准输出
+      dup(p[1]);  // 复制管道的写端文件描述符 p[1] 到标准输出（文件描述符 1）
       close(p[0]);
       close(p[1]);
       runcmd(pcmd->left);
     }
     if(fork1() == 0){
-      close(0);
-      dup(p[0]);
+      close(0);   // 关闭标准输入
+      dup(p[0]);  // 复制管道的读端文件描述符 p[0] 到标准输入（文件描述符 0）
       close(p[0]);
       close(p[1]);
       runcmd(pcmd->right);
@@ -147,7 +149,9 @@ main(void)
   static char buf[100];
   int fd;
 
-  // Ensure that three file descriptors are open.
+  // Ensure that three file descriptors (fd) are open.
+  // 确保打开了3个文件描述符，这是控制台的默认描述符数量
+  // 分别是stdin, stdout, stderr
   while((fd = open("console", O_RDWR)) >= 0){
     if(fd >= 3){
       close(fd);
@@ -157,16 +161,18 @@ main(void)
 
   // Read and run input commands.
   while(getcmd(buf, sizeof(buf)) >= 0){
-    if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
+    if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){  //处理cd命令
       // Chdir must be called by the parent, not the child.
       buf[strlen(buf)-1] = 0;  // chop \n
       if(chdir(buf+3) < 0)
         fprintf(2, "cannot cd %s\n", buf+3);
       continue;
     }
-    if(fork1() == 0)
-      runcmd(parsecmd(buf));
-    wait(0);
+    // 创建shell进程的副本，在父进程中返回子进程的PID，
+    // 如果当前返回0则表示在执行子进程代码
+    if(fork1() == 0)  
+      runcmd(parsecmd(buf));    // 子进程执行命令
+    wait(0);    // 父进程调用wait进行等待
   }
   exit(0);
 }
