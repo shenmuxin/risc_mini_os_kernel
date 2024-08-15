@@ -45,7 +45,7 @@ start()
   int id = r_mhartid();
   w_tp(id);
 
-  // switch to supervisor mode and jump to main().
+  // switch to supervisor mode and jump to main(). 从机器模式特权级切换到主管模式
   asm volatile("mret");
 }
 
