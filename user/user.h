@@ -24,6 +24,8 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int trace(int);     // 新增系统调用的跳板函数
+struct sysinfo;     // 声明 sysinfo 结构，供用户态使用。
+int sysinfo(struct sysinfo *);
 
 // ulib.c
 int stat(const char*, struct stat*);

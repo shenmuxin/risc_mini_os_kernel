@@ -153,6 +153,7 @@ UPROGS=\
 	$U/_pingpong\
 	$U/_find\
 	$U/_trace\
+	$U/_sysinfotest\
 
 
 

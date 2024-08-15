@@ -21,3 +21,4 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_trace  22   // 新增sys_trace系统调用
+#define SYS_sysinfo   23   // 新增sys_sysinfo系统调用

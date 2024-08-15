@@ -37,3 +37,5 @@ entry("sbrk");
 entry("sleep");
 entry("uptime");
 entry("trace");         # 新增系统调用sys_trace的跳板函数
+entry("sysinfo");          # 新增系统调用sys_sysinfo的跳板函数
+
