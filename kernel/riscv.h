@@ -333,7 +333,7 @@ sfence_vma()
 #define PTE_U (1L << 4) // 1 -> user can access
 
 // shift a physical address to the right place for a PTE.
-#define PA2PTE(pa) ((((uint64)pa) >> 12) << 10)
+#define PA2PTE(pa) ((((uint64)pa) >> 12) << 10)   // 一个Physical address是44+12=56位，所以这里需要强制类型转换
 
 #define PTE2PA(pte) (((pte) >> 10) << 12)
 

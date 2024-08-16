@@ -21,7 +21,7 @@ static void freeproc(struct proc *p);
 
 extern char trampoline[]; // trampoline.S
 
-// initialize the proc table at boot time.
+// initialize the proc table at boot time.  为每个进程都分配一个内核堆栈
 void
 procinit(void)
 {

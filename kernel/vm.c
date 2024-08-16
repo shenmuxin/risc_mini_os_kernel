@@ -57,7 +57,7 @@ kvminithart()
 }
 
 // Return the address of the PTE in page table pagetable
-// that corresponds to virtual address va.  If alloc!=0,
+// that corresponds to virtual address (va).  If alloc!=0,
 // create any required page-table pages.
 //
 // The risc-v Sv39 scheme has three levels of page-table
@@ -142,7 +142,7 @@ kvmpa(uint64 va)
 }
 
 // Create PTEs for virtual addresses starting at va that refer to
-// physical addresses starting at pa. va and size might not
+// physical addresses starting at physical address (pa). va and size might not
 // be page-aligned. Returns 0 on success, -1 if walk() couldn't
 // allocate a needed page-table page.
 int
@@ -277,12 +277,12 @@ freewalk(pagetable_t pagetable)
   // there are 2^9 = 512 PTEs in a page table.
   for(int i = 0; i < 512; i++){
     pte_t pte = pagetable[i];
-    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){
+    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){  // 如果当前PTE有效且没被设置PTE_R or PTE_W or PTE_X，则认为是一个逻辑页
       // this PTE points to a lower-level page table.
       uint64 child = PTE2PA(pte);
       freewalk((pagetable_t)child);
       pagetable[i] = 0;
-    } else if(pte & PTE_V){
+    } else if(pte & PTE_V){   // 遇到物理页
       panic("freewalk: leaf");
     }
   }
@@ -348,7 +348,7 @@ uvmclear(pagetable_t pagetable, uint64 va)
   *pte &= ~PTE_U;
 }
 
-// Copy from kernel to user.
+// Copy from kernel to user.  从kernel虚拟内存copy到user虚拟内存
 // Copy len bytes from src to virtual address dstva in a given page table.
 // Return 0 on success, -1 on error.
 int
@@ -373,7 +373,7 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
   return 0;
 }
 
-// Copy from user to kernel.
+// Copy from user to kernel.  从user虚拟内存copy到kernel虚拟内存
 // Copy len bytes to dst from virtual address srcva in a given page table.
 // Return 0 on success, -1 on error.
 int
@@ -439,4 +439,33 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   } else {
     return -1;
   }
+}
+
+// print page table
+int pgtblprint(pagetable_t pagetable, int depth) {
+  // there are 2^9 = 512 PTEs in a page table.
+  for(int i = 0; i < 512; i++){
+    pte_t pte = pagetable[i];
+    if(pte & PTE_V) { // 如果页表项有效
+      // 按格式打印页表项
+      printf("..");
+      for(int j=0;j<depth;j++) {
+        printf(" ..");
+      }
+      printf("%d: pte %p pa %p\n", i, pte, PTE2PA(pte));
+
+      // 如果该节点不是叶节点，递归打印其子节点。如果不是物理页，则继续递归访问虚拟页中的下个PTE
+      if((pte & (PTE_R|PTE_W|PTE_X)) == 0){
+        // this PTE points to a lower-level page table.
+        uint64 child = PTE2PA(pte);
+        pgtblprint((pagetable_t)child,depth+1);
+      }
+    }
+  }
+  return 0;
+}
+
+int vmprint(pagetable_t pagetable) {
+  printf("page table %p\n", pagetable);
+  return pgtblprint(pagetable, 0);
 }
