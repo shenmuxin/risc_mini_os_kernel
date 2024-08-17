@@ -164,12 +164,17 @@ void            kvminithart(void);
 // uint64          kvmpa(uint64);
 // void            kvmmap(uint64, uint64, uint64, int);
 
-/* 新增的函数声明begin */ 
+/* lab-3-2,新增的函数声明begin */ 
 uint64          kvmpa(pagetable_t pgtbl, uint64);           // 修改后的声明
 void            kvmmap(pagetable_t pgtbl, uint64, uint64, uint64, int);        // 修改后的声明
 pagetable_t     kvminit_newpgtbl();                         
 void            kvm_free_kernelpgtbl(pagetable_t pagetable);    
-/* 新增的函数声明end */ 
+/* lab-3-2,新增的函数声明end */ 
+
+/* lab-3-3,新增的函数声明begin */
+int             kvmcopymappings(pagetable_t src, pagetable_t dst, uint64 start, uint64 sz);
+uint64          kvmdealloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz);
+/* lab-3-3,新增的函数声明end */ 
 
 int             mappages(pagetable_t, uint64, uint64, uint64, int);
 pagetable_t     uvmcreate(void);
