@@ -29,7 +29,7 @@ trapinithart(void)
   w_stvec((uint64)kernelvec);
 }
 
-//
+// 用户空间陷阱的处理函数,确定陷阱原因,处理并返回
 // handle an interrupt, exception, or system call from user space.
 // called from trampoline.S
 //

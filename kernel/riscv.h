@@ -47,7 +47,7 @@ w_mepc(uint64 x)
 #define SSTATUS_UIE (1L << 0)  // User Interrupt Enable
 
 static inline uint64
-r_sstatus()
+r_sstatus()                    // read sstatus
 {
   uint64 x;
   asm volatile("csrr %0, sstatus" : "=r" (x) );
@@ -55,7 +55,7 @@ r_sstatus()
 }
 
 static inline void 
-w_sstatus(uint64 x)
+w_sstatus(uint64 x)            // write sstatus
 {
   asm volatile("csrw sstatus, %0" : : "r" (x));
 }
@@ -189,13 +189,13 @@ w_mtvec(uint64 x)
 // supervisor address translation and protection;
 // holds the address of the page table.
 static inline void 
-w_satp(uint64 x)
+w_satp(uint64 x)      // write satp
 {
   asm volatile("csrw satp, %0" : : "r" (x));
 }
 
 static inline uint64
-r_satp()
+r_satp()              // read satp
 {
   uint64 x;
   asm volatile("csrr %0, satp" : "=r" (x) );
@@ -287,7 +287,7 @@ r_sp()
   return x;
 }
 
-// read and write tp, the thread pointer, which holds
+// read and write tp (thread pointer 线程指针), the thread pointer, which holds
 // this core's hartid (core number), the index into cpus[].
 static inline uint64
 r_tp()
@@ -308,6 +308,17 @@ r_ra()
 {
   uint64 x;
   asm volatile("mv %0, ra" : "=r" (x) );
+  return x;
+}
+
+// read frame pointer (fp), fp stores in s0
+// fp - 8bit is return address
+// fp - 16bit is the previous fp
+static inline uint64
+r_fp() 
+{
+  uint64 x;
+  asm volatile("mv %0, s0" : "=r" (x));
   return x;
 }
 
