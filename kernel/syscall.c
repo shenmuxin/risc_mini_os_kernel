@@ -141,7 +141,7 @@ syscall(void)
 
   num = p->trapframe->a7;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
-    p->trapframe->a0 = syscalls[num]();
+    p->trapframe->a0 = syscalls[num]();         // 根据a7中的系统调用号来调用系统中断，并将返回值写入寄存器a0
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);

@@ -14,7 +14,7 @@ trampoline:
 .align 4
 .globl uservec
 uservec:    
-	# 用户空间陷阱的入口
+	# 用户空间陷阱的入口,保存当前用户寄存器的内容
         # trap.c sets stvec to point here, so
         # traps from user space start here,
         # in supervisor mode, but with a
@@ -28,7 +28,7 @@ uservec:
         # so that a0 is TRAPFRAME
         csrrw a0, sscratch, a0
 
-        # save the user registers in TRAPFRAME
+        # save the user registers in TRAPFRAME, 'sd' means 'store double word', '40(a0)' means the address of 'a0+40'
         sd ra, 40(a0)
         sd sp, 48(a0)
         sd gp, 56(a0)
@@ -61,11 +61,11 @@ uservec:
         sd t6, 280(a0)
 
 	# save the user a0 in p->trapframe->a0
-        csrr t0, sscratch
+        csrr t0, sscratch       # read 'sscratch' to 't0'
         sd t0, 112(a0)
 
         # restore kernel stack pointer from p->trapframe->kernel_sp
-        ld sp, 8(a0)
+        ld sp, 8(a0)                    # 'ld' means 'load double word'
 
         # make tp hold the current hartid, from p->trapframe->kernel_hartid
         ld tp, 32(a0)
@@ -76,12 +76,12 @@ uservec:
         # restore kernel page table from p->trapframe->kernel_satp
         ld t1, 0(a0)
         csrw satp, t1
-        sfence.vma zero, zero
+        sfence.vma zero, zero           # clear TLB
 
         # a0 is no longer valid, since the kernel page
         # table does not specially map p->tf.
 
-        # jump to usertrap(), which does not return
+        # jump to usertrap(), which does not return, 'jr' means 'jump register'
         jr t0
 
 .globl userret
@@ -136,6 +136,6 @@ userret:
 	# restore user a0, and save TRAPFRAME in sscratch
         csrrw a0, sscratch, a0
         
-        # return to user mode and user pc.
+        # return to user mode and user pc. 'sret' 会读取 'sstatus'中的值,用于恢复特权级
         # usertrapret() set up sstatus and sepc.
         sret
