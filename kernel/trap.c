@@ -50,7 +50,9 @@ usertrap(void)
   // save user program counter.
   p->trapframe->epc = r_sepc();
   
-  if(r_scause() == 8){
+  uint64 cause = r_scause();
+
+  if(cause == 8){
     // system call
 
     if(p->killed)
@@ -67,6 +69,20 @@ usertrap(void)
     syscall();
   } else if((which_dev = devintr()) != 0){
     // ok
+  } else if (cause == 12 || cause == 13 || cause == 15) {
+// 处理页面错误
+    uint64 fault_va = r_stval();  // 产生页面错误的虚拟地址
+    char* pa;                     // 分配的物理地址
+    if(PGROUNDUP(p->trapframe->sp) - 1 < fault_va && fault_va < p->sz && (pa = kalloc()) != 0) {
+        memset(pa, 0, PGSIZE);
+        if(mappages(p->pagetable, PGROUNDDOWN(fault_va), PGSIZE, (uint64)pa, PTE_R | PTE_W | PTE_X | PTE_U) != 0) {
+          kfree(pa);
+          p->killed = 1;
+        }
+    } else {
+      // printf("usertrap(): out of memory!\n");
+      p->killed = 1;
+    }
   } else {
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
