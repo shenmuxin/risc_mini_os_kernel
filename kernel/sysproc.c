@@ -49,10 +49,18 @@ sys_sbrk(void)
   if(argint(0, &n) < 0)
     return -1;
   addr = p->sz;
-  if(n < 0) {
-    uvmdealloc(p->pagetable, p->sz, p->sz+n); // 如果是缩小空间,则马上释放
+
+  if (n >= 0)
+  {
+    p->sz = addr + n;   // 懒分配,不立即分配空间
   }
-  p->sz += n; // 懒分配,不立即分配空间
+  else if (addr + n > 0) // 确保缩小后的地址不会小于0
+  {
+    uint64 tmp = uvmdealloc(p->pagetable, addr, addr + n);
+    p->sz = tmp;
+  }
+  else
+    return -1;
   return addr;
 }
 

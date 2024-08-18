@@ -64,12 +64,42 @@ argint(int n, int *ip)
 // Retrieve an argument as a pointer.
 // Doesn't check for legality, since
 // copyin/copyout will do that.
-int
-argaddr(int n, uint64 *ip)
-{
+// int
+// argaddr(int n, uint64 *ip)
+// {
+//   *ip = argraw(n);
+//   return 0;
+// }
+
+int argaddr(int n, uint64 *ip) // 进行sbrk后继续执行系统调用，进入另一个trap分支
+{                              // 会导致虚拟地址为分配内存 所以在这里需要判断一下
   *ip = argraw(n);
+  struct proc *p = myproc();
+  if (walkaddr(p->pagetable, *ip) == 0) // 如果页表不存在或者未分配物理块则进行分配和映射
+  {
+    // 如果对应的虚拟地址并没有分配内存时 给他分配并建立映射
+    uint64 pa;
+    if (*ip > PGROUNDUP(p->trapframe->sp) - 1 && *ip < p->sz &&
+        (pa = (uint64)kalloc()) != 0) // 同样需要判断一下是否在堆的位置上
+    {
+      memset((void *)pa, 0, PGSIZE);
+      // 在用户页表中创建一个映射关系
+      *ip = PGROUNDDOWN(*ip); // 这里搞不明白为什么非要加一个对齐
+      // 因为下面的函数里面其实已经有对齐操作了
+      if (mappages(p->pagetable, *ip, PGSIZE, pa, PTE_W | PTE_R | PTE_U | PTE_X) != 0)
+      {
+        kfree((void *)pa);
+        return -1;
+      }
+    }
+    else
+    {
+      return -1;
+    }
+  }
   return 0;
 }
+
 
 // Fetch the nth word-sized system call argument as a null-terminated string.
 // Copies into buf, at most max.
