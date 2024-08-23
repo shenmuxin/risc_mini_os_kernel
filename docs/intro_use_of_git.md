@@ -1,6 +1,6 @@
 # Intro. Git 版本管理
 
-[toc]
+
 
 下载仓库
 
@@ -107,7 +107,7 @@ git rm -r 文件夹名 --cached
 
 GitHub 在 2021 年 8 月 13 日后停止了对密码认证的支持。要解决这个问题，你需要使用**个人访问令牌**（Personal Access Token, PAT）来代替密码进行身份验证。
 
-![img](./Markdown_Note/MIT6.S801.assets/git_3.png)
+![img](./MIT6.S801.assets/git_3.png)
 
 添加令牌
 
