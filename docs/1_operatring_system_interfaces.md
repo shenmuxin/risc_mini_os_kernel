@@ -1,10 +1,8 @@
 ## 1. 操作系统接口
 
-[toc]
-
 ### 1.1 内存和进程
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/1_1.png)
+![img](./MIT6.S801.assets/1_1.png)
 
 ### 1.2 I/O与文件描述符
 

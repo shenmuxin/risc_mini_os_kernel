@@ -1,6 +1,6 @@
 # Intro. 使用GDB
 
-[toc]
+
 
 GDB全称是GUN Debugger，以带有或者不带有GDB的方式使用`make`指令启动QEMU
 
@@ -21,15 +21,15 @@ add-auto-load-safe-path </path/to/your/directory/.gdbinit>		// 添加这句，�
 
 使用的效果如图所示
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/gdb_1.png)
+![img](./MIT6.S801.assets/gdb_1.png)
 
 - 使用`layout split`查看多级分布
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/gdb_2.png)
+![img](./MIT6.S801.assets/gdb_2.png)
 
 - 输入 `tui enable` 命令会启用 GDB 的文本用户界面（TUI）模式。TUI 模式是一种增强的调试界面，提供了源代码和汇编代码的可视化显示，让你更直观地进行调试。
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/gdb_3.png)
+![img](./MIT6.S801.assets/gdb_3.png)
 
 - `layout asm`查看汇编码
 - `layout reg`查看寄存器

@@ -1,6 +1,6 @@
 ## 6. 锁
 
-[toc]
+
 
 大多数内核，包括xv6，交错执行多个活动。交错的一个来源是多处理器硬件：计算机的多个CPU之间独立执行，如xv6的RISC-V。多个处理器共享物理内存，xv6利用共享（sharing）来维护所有CPU进行读写的数据结构。这种共享增加了一种可能性，即一个CPU读取数据结构，而另一个CPU正在更新它，甚至多个CPU同时更新相同的数据；如果不仔细设计，这种并行访问可能会产生不正确的结果或损坏数据结构。即使在单处理器上，内核也可能在许多线程之间切换CPU，导致它们的执行交错。最后，如果中断发生在错误的时间，设备中断处理程序修改与某些可中断代码相同的数据，可能导致数据损坏。单词并发（concurrency）是指由于多处理器并行、线程切换或中断，多个指令流交错的情况。
 
@@ -16,7 +16,7 @@ Xv6使用了许多并发控制技术，这取决于不同的情况。本章重�
 
 作为我们为什么需要锁的一个例子，考虑两个进程在两个不同的CPU上调用`wait`。`wait`释放了子进程的内存。因此，在每个CPU上，内核将调用`kfree`来释放子进程的页面。内核分配器维护一个链接列表：`kalloc()`(***kernel/kalloc.c:69***) 从空闲页面列表中取出（pop）一个内存页面；`kfree()`(***kernel/kalloc.c:47***) 将一个内存页面添加（push）到空闲列表上。为了获得最佳性能，我们可能希望两个父进程的`kfree`可以并行执行，而不必等待另一个进程，但是考虑到xv6的`kfree`实现，这将导致错误。
 
- ![6_1png](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_1png) 
+ ![6_1png](./MIT6.S801.assets/6_1png) 
 
 图6.1更详细地说明了这项设定：链表位于两个CPU共享的内存中，这两个CPU使用`load`和`store`指令操作链表。（实际上，每个处理器都有cache，但从概念上讲，多处理器系统的行为就像所有CPU共享一块单独的内存一样）如果没有并发请求，您可能以如下方式实现列表push操作：
 
@@ -40,7 +40,7 @@ push(int data)
 }
 ```
 
-![6_2](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_2.png)
+![6_2](./MIT6.S801.assets/6_2.png)
 
 如果存在隔离性，那么这个实现是正确的。但是，如果多个副本并发执行，代码就会出错。如果两个CPU同时执行`push`，如图6.1所示，两个CPU都可能在执行第16行之前执行第15行，这会导致如图6.2所示的不正确的结果。然后会有两个类型为`element`的列表元素使用`next`指针设置为`list`的前一个值。当两次执行位于第16行的对`list`的赋值时，第二次赋值将覆盖第一次赋值；第一次赋值中涉及的元素将丢失。
 
@@ -195,13 +195,13 @@ Xv6以睡眠锁（sleep-locks）的形式提供了这种锁。`acquiresleep` (**
 
 **lock的抽象结构**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_3.png)
+![img](./MIT6.S801.assets/6_3.png)
 
 保证在`acquire`和`release`之间的代码都是原子的（atomic），要么同时执行，要么一个都不执行。如果只有一把内核锁的话，那么kernel的大部分操作都将被串行化，极大程度减小了运行效率。
 
 **什么时候需要锁**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_4.png)
+![img](./MIT6.S801.assets/6_4.png)
 
 当两个进程都在同时操作（读写）一处共享数据的时候，我们需要使用锁来保护这处的数据。
 
@@ -209,7 +209,7 @@ Xv6以睡眠锁（sleep-locks）的形式提供了这种锁。`acquiresleep` (**
 
 这样会导致数据结构非常死板
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_5.png)
+![img](./MIT6.S801.assets/6_5.png)
 
 
 
@@ -219,7 +219,7 @@ Xv6以睡眠锁（sleep-locks）的形式提供了这种锁。`acquiresleep` (**
 - 锁保持操作是原子的
 - 锁帮助保持不变性
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_6.png)
+![img](./MIT6.S801.assets/6_6.png)
 
 **死锁**
 
@@ -250,7 +250,7 @@ Xv6以睡眠锁（sleep-locks）的形式提供了这种锁。`acquiresleep` (**
   3. 最后，`P3` 持有资源 `R3`，并等待 `P1` 持有的 `R1`。
   4. 由于每个进程都在等待链中的下一个进程释放资源，导致所有进程都无法继续执行，形成死锁。
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_7.png)
+![img](./MIT6.S801.assets/6_7.png)
 
 
 
@@ -258,7 +258,7 @@ Xv6以睡眠锁（sleep-locks）的形式提供了这种锁。`acquiresleep` (**
 
 **locks vs performance**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_8.png)
+![img](./MIT6.S801.assets/6_8.png)
 
 提升performance的方法就是将数据结构进行拆分
 
@@ -268,9 +268,9 @@ Xv6以睡眠锁（sleep-locks）的形式提供了这种锁。`acquiresleep` (**
 
 减少软件来实现原子性，而是使用硬操作来实现，利用硬件提供的`test and set support`来实现锁，在RISC-V中硬件提供了`amoswap addr r1, r2`支持，采用原子的步骤交换两个地址之间的值，C语言中实现了这种支持，这里是`__sync_lock_test_and_set`。
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_10.png)
+![img](./MIT6.S801.assets/6_10.png)
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_9.png)
+![img](./MIT6.S801.assets/6_9.png)
 
 
 
@@ -306,7 +306,7 @@ mov dword ptr [a], eax	# (3)
 - xv6中的用户进程只有一个线程，不会共享内存
 - linux user中的用户进程有多个线程，会在彼此之间共享内存。
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_11.png)
+![img](./MIT6.S801.assets/6_11.png)
 
 Thread chanllenges:
 
@@ -329,7 +329,7 @@ pre-emptiue sheduling（抢占式调度）
 
 比如当我们需要从一个编译器线程`cc`切换到`ls`线程，我们先通过`trampoline`进入kernel然后获得`trapframe`和`kernel stack`，然后我们通过`scheduler`切换到`ls`线程所对应的内核线程，然后从kernel恢复到user。
 
-![](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/6_12.png)
+![](./MIT6.S801.assets/6_12.png)
 
 在切换线程的时候，使用`p->context`来存储需要保存或者恢复的数据
 

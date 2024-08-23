@@ -1,6 +1,6 @@
 ## 4. 陷阱指令和系统调用
 
-[toc]
+
 
 有三种事件会导致中央处理器搁置普通指令的执行，并强制将控制权转移到处理该事件的特殊代码上。一种情况是系统调用，当用户程序执行`ecall`指令要求内核为其做些什么时；另一种情况是异常：（用户或内核）指令做了一些非法的事情，例如除以零或使用无效的虚拟地址；第三种情况是设备中断，一个设备，例如当磁盘硬件完成读或写请求时，向系统表明它需要被关注。
 
@@ -65,7 +65,7 @@ xv6使用包含`uservec`的蹦床页面（trampoline page）来满足这些约�
 
 **从users pacce陷入kernel space的过程**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_1.png)
+![img](./MIT6.S801.assets/4_1.png)
 
 
 
@@ -155,7 +155,7 @@ COW策略对`fork`很有效，因为通常子进程会在`fork`之后立即调�
 
 **有关Page faults的要点**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_2.png)
+![img](./MIT6.S801.assets/4_2.png)
 
 - lazy allocation，懒分配
 - mmap（Memory Mapped Files）
@@ -174,15 +174,15 @@ COW策略对`fork`很有效，因为通常子进程会在`fork`之后立即调�
 
 **SCAUSE寄存器中断号**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_3.png)
+![img](./MIT6.S801.assets/4_3.png)
 
 **Allocation---->sbrk()**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_4.png)
+![img](./MIT6.S801.assets/4_4.png)
 
 **Lazy allocation**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_5.png)
+![img](./MIT6.S801.assets/4_5.png)
 
 
 
@@ -202,7 +202,7 @@ COW策略对`fork`很有效，因为通常子进程会在`fork`之后立即调�
 
 **按需补零（zero fill on demand）**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_6.png)
+![img](./MIT6.S801.assets/4_6.png)
 
 
 
@@ -210,7 +210,7 @@ COW策略对`fork`很有效，因为通常子进程会在`fork`之后立即调�
 
 **Copy-on-write fork**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_7.png)
+![img](./MIT6.S801.assets/4_7.png)
 
 
 
@@ -237,7 +237,7 @@ COW fork() 使得释放实现用户内存的物理页面变得有些棘手。COW
 
 **Demand paging**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_8.png)
+![img](./MIT6.S801.assets/4_8.png)
 
 
 
@@ -254,7 +254,7 @@ COW fork() 使得释放实现用户内存的物理页面变得有些棘手。COW
    - 当进程访问一个不在内存中的页面时,会触发缺页中断(page fault)。
    - 操作系统会捕获这个中断,并通过Demand Paging机制将所需页面从磁盘加载到内存中。
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_9.png)
+![img](./MIT6.S801.assets/4_9.png)
 
 页面置换的时候遵循LRU（least recently used）原则，优先选择：
 
@@ -263,6 +263,5 @@ COW fork() 使得释放实现用户内存的物理页面变得有些棘手。COW
 
 **Memory-mapped files**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/4_10.png)
+![img](./MIT6.S801.assets/4_10.png)
 
-## 

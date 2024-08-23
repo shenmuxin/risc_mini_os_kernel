@@ -1,6 +1,6 @@
 ## 5. 中断和设备驱动
 
-[toc]
+
 
 驱动程序是操作系统中管理特定设备的代码：它配置硬件设备，告诉设备执行操作，处理由此产生的中断，并与可能正在等待设备输入/输出的进程进行交互。编写驱动可能很棘手，因为驱动程序与它管理的设备同时运行。此外，驱动程序必须理解设备的硬件接口，这可能很复杂，而且缺乏文档。
 
@@ -62,13 +62,13 @@ RISC-V要求定时器中断在机器模式而不是管理模式下进行。RISC-
 
  
 
-![image-20240819224626569](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_1.png)
+![image-20240819224626569](./MIT6.S801.assets/5_1.png)
 
 - asychronou，异步的
 - cocurrency，并行的
 - program devices
 
-![image-20240819224949241](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_2.png)
+![image-20240819224949241](./MIT6.S801.assets/5_2.png)
 
 
 
@@ -76,15 +76,15 @@ RISC-V要求定时器中断在机器模式而不是管理模式下进行。RISC-
 
 
 
-![image-20240819225133548](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_3.png)
+![image-20240819225133548](./MIT6.S801.assets/5_3.png)
 
 
 
-![image-20240819230133646](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_4.png)
+![image-20240819230133646](./MIT6.S801.assets/5_4.png)
 
 使用16550作为UART芯片，通过控制其中的寄存器`001`（Interrupt Enable Register），来产生中断
 
-![image-20240819231228067](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_5.png)
+![image-20240819231228067](./MIT6.S801.assets/5_5.png)
 
 
 
@@ -92,11 +92,11 @@ RISC-V要求定时器中断在机器模式而不是管理模式下进行。RISC-
 
 **Console是如何工作的：**
 
-![image-20240819231820774](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_6.png)
+![image-20240819231820774](./MIT6.S801.assets/5_6.png)
 
 `mknod` 是一个用于在文件系统中创建特殊文件的命令。它主要用于创建设备文件或命名管道（FIFO）。console维护的FIFO如下所示：
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_9.png)
+![img](./MIT6.S801.assets/5_9.png)
 
 
 
@@ -158,7 +158,7 @@ RISC-V对interupts有一系列的支持：
 
 **中断和并发**
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_7.png)
+![img](./MIT6.S801.assets/5_7.png)
 
 
 
@@ -168,7 +168,7 @@ RISC-V对interupts有一系列的支持：
 
 
 
-![img](/home/sjh/Documents/Markdown_Note/MIT6.S801.assets/5_8.png)
+![img](./MIT6.S801.assets/5_8.png)
 
 
 
