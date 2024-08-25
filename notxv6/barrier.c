@@ -30,6 +30,18 @@ barrier()
   // Block until all threads have called barrier() and
   // then increment bstate.round.
   //
+  pthread_mutex_lock(&bstate.barrier_mutex);    // 加锁，防止其他线程并发修改
+  if(++bstate.nthread < nthread) {
+    // 如果线程需要等待，则会在条件变量 barrier_cond 上等待
+    pthread_cond_wait(&bstate.barrier_cond, &bstate.barrier_mutex);
+  } else {
+    bstate.nthread = 0;
+    bstate.round++;     // 统计屏障的轮次
+    // 唤醒所有等待在条件变量 barrier_cond 上的线程，使它们能够继续执行
+    pthread_cond_broadcast(&bstate.barrier_cond);
+  }
+  // 释放互斥锁，允许其他线程进入屏障代码
+  pthread_mutex_unlock(&bstate.barrier_mutex);
   
 }
 
