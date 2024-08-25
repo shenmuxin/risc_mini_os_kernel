@@ -4,6 +4,8 @@ __pycache__
 
 # 忽略操作系统生成的临时文件
 user
+barrier
+ph
 
 
 # 忽略环境配置文件
