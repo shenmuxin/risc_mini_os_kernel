@@ -1,6 +1,6 @@
 # Mini kernel based on RISC-V
 
-This project is based on [MIT6.S801](https://pdos.csail.mit.edu/6.S081/2020/index.html), This material can help you to understand this project:
+This project is based on [MIT6.S801](https://pdos.csail.mit.edu/6.S081/2020/index.html), These materials can help you to understand this project:
 
 [Preliminary: basic usage of git](./docs/intro_use_of_git.md)
 
@@ -12,7 +12,7 @@ This project is based on [MIT6.S801](https://pdos.csail.mit.edu/6.S081/2020/inde
 
 [Chapter 3 page table](./docs/3_page_table.md)
 
-[Chapter 4 traps and system calss](./docs/4_traps_and_system_calls.md)
+[Chapter 4 traps and system calls](./docs/4_traps_and_system_calls.md)
 
 [Chapter 5 interrupts and device drivers](./docs/5_interrupts_and_device_drivers.md)
 
