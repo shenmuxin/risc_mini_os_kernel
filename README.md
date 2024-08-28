@@ -47,3 +47,5 @@ $ make qemu
 $ ....
 ```
 
+Then you will see a console like this:
+
