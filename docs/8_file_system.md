@@ -527,3 +527,14 @@ Group Commit
 
 首先修改 struct inode（内存中的 inode 副本结构体）以及 struct dinode（磁盘上的 inode 结构体）
 
+
+
+在 xv6 中，通过以下步骤实现用户调用 `symlink` 能够正确映射到内核中的 `sys_symlink` 函数：
+
+1. **定义系统调用号**: 在 `syscall.h` 中定义 `SYS_symlink`。
+2. **声明用户接口**: 在 `user.h` 和 `usys.S` 中声明并实现用户级 `symlink` 函数。
+3. **注册系统调用**: 在 `syscall.c` 中将 `SYS_symlink` 映射到 `sys_symlink` 函数。
+4. **实现内核函数**: 在内核中实现 `sys_symlink`，包括符号链接的创建逻辑。
+5. **修改路径解析**: 更新文件系统的路径解析函数以支持符号链接的递归解析。
+6. **系统调用处理**: 确保 `syscall` 函数能够处理新的系统调用。
+7. **编译和测试**: 重新编译 xv6 并测试新的 `symlink` 功能，确保其正常工作。
