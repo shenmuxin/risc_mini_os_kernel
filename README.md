@@ -49,3 +49,35 @@ $ ....
 
 Then you will see a console like this:
 
+```bash
+xv6 kernel is booting
+
+init: starting sh
+$ ls
+.              1 1 1024
+..             1 1 1024
+README         2 2 2059
+cat            2 3 23984
+echo           2 4 22808
+forktest       2 5 13168
+grep           2 6 27344
+init           2 7 23912
+kill           2 8 22768
+ln             2 9 22720
+ls             2 10 26208
+mkdir          2 11 22872
+rm             2 12 22856
+sh             2 13 41744
+stressfs       2 14 23872
+usertests      2 15 152312
+grind          2 16 38016
+wc             2 17 25112
+zombie         2 18 22256
+symlinktest    2 19 33192
+bigfile        2 20 24496
+console        3 21 0
+$ echo "hi"
+"hi"
+$ 
+```
+
