@@ -109,7 +109,7 @@ write_head(void)
   for (i = 0; i < log.lh.n; i++) {
     hb->block[i] = log.lh.block[i];
   }
-  bwrite(buf);
+  bwrite(buf);      // this write is the real commit point
   brelse(buf);
 }
 
