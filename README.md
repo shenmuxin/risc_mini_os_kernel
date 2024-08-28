@@ -20,6 +20,8 @@ This project is based on [MIT6.S801](https://pdos.csail.mit.edu/6.S081/2020/inde
 
 [Chapter 7 scheduling](./docs/7_scheduling.md)
 
+[Chapter 8 file system](./docs/8_file_system.md)
+
 This project refers to a lot of information, which is not listed here one by one. Thanks to the open source contributors for sharing.
 
 ## Installing on Ubuntu
